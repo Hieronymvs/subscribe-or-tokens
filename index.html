@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Subscribe or Tokens? — AI plan vs pay-as-you-go calculator</title>
+<meta name="description" content="Should you pay for a Claude, ChatGPT or Gemini subscription, or pay per token via the API? Enter your usage and find the cheapest option. Prices verified July 2026.">
+<style>
+  :root{
+    --bg:#0d1117; --panel:#161b22; --panel2:#1c2330; --border:#2d3748;
+    --text:#e6edf3; --muted:#8b949e; --accent:#58a6ff; --green:#3fb950;
+    --amber:#d29922; --red:#f85149;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.55}
+  .wrap{max-width:960px;margin:0 auto;padding:24px 16px 64px}
+  header{text-align:center;padding:40px 0 24px}
+  h1{font-size:2rem;letter-spacing:-.5px}
+  h1 .q{color:var(--accent)}
+  .tagline{color:var(--muted);margin-top:8px;font-size:1.05rem}
+  .stamp{display:inline-block;margin-top:14px;font-size:.8rem;color:var(--amber);border:1px solid var(--amber);border-radius:20px;padding:3px 12px}
+  section{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:24px;margin-top:24px}
+  h2{font-size:1.25rem;margin-bottom:14px}
+  h3{font-size:1rem;margin:18px 0 8px}
+  .presets{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+  .presets button{background:var(--panel2);border:1px solid var(--border);color:var(--text);padding:8px 14px;border-radius:8px;cursor:pointer;font-size:.9rem}
+  .presets button.active{border-color:var(--accent);color:var(--accent)}
+  .sliders{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px}
+  .slider-box label{display:flex;justify-content:space-between;font-size:.9rem;color:var(--muted);margin-bottom:6px}
+  .slider-box output{color:var(--text);font-weight:600}
+  input[type=range]{width:100%;accent-color:var(--accent)}
+  .result-head{margin-top:22px;padding:16px;background:var(--panel2);border-radius:8px;border-left:4px solid var(--green)}
+  .result-head strong{font-size:1.1rem}
+  table{width:100%;border-collapse:collapse;margin-top:14px;font-size:.92rem}
+  th{text-align:left;color:var(--muted);font-weight:600;padding:8px 10px;border-bottom:1px solid var(--border)}
+  td{padding:8px 10px;border-bottom:1px solid var(--border)}
+  td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+  tr.best td{color:var(--green);font-weight:600}
+  .badge{font-size:.72rem;padding:2px 8px;border-radius:10px;border:1px solid var(--border);color:var(--muted);white-space:nowrap}
+  .badge.sub{border-color:var(--accent);color:var(--accent)}
+  .badge.api{border-color:var(--amber);color:var(--amber)}
+  .note{color:var(--muted);font-size:.85rem;margin-top:12px}
+  a{color:var(--accent);text-decoration:none}
+  a:hover{text-decoration:underline}
+  .disclaimer{border-left:4px solid var(--amber);padding:12px 16px;background:var(--panel2);border-radius:8px;font-size:.88rem;color:var(--muted);margin-top:16px}
+  footer{text-align:center;margin-top:40px;color:var(--muted);font-size:.88rem}
+  .support{display:inline-block;margin:12px 6px 0;background:var(--panel2);border:1px solid var(--border);border-radius:8px;padding:10px 18px;color:var(--text)}
+  .support:hover{border-color:var(--accent);text-decoration:none}
+  details{margin-top:10px}
+  summary{cursor:pointer;color:var(--accent)}
+  .src{font-size:.78rem}
+  @media(max-width:600px){h1{font-size:1.5rem} section{padding:16px} table{font-size:.8rem} td,th{padding:6px 6px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>Subscribe or Tokens<span class="q">?</span></h1>
+  <p class="tagline">Flat AI subscription or pay-as-you-go API — which is cheaper <em>for your usage</em>?</p>
+  <span class="stamp" id="verifiedStamp">Prices last verified: July 8, 2026</span>
+</header>
+
+<section id="calculator">
+  <h2>1 · Describe your usage</h2>
+  <div class="presets" id="presets"></div>
+  <div class="sliders">
+    <div class="slider-box">
+      <label>Requests per day <output id="reqOut"></output></label>
+      <input type="range" id="reqSlider" min="1" max="300" value="30">
+    </div>
+    <div class="slider-box">
+      <label>Avg input tokens / request <output id="inOut"></output></label>
+      <input type="range" id="inSlider" min="0" max="100" value="30">
+    </div>
+    <div class="slider-box">
+      <label>Avg output tokens / request <output id="outOut"></output></label>
+      <input type="range" id="outSlider" min="0" max="100" value="25">
+    </div>
+  </div>
+  <p class="note">Agentic coding tools read lots of files — input tokens dominate. A single Claude Code task can easily consume 100k–500k input tokens. Chat messages are far smaller (hundreds of tokens).</p>
+
+  <h2 style="margin-top:26px">2 · Your monthly cost, every option</h2>
+  <div class="result-head" id="verdict"></div>
+  <table id="resultTable">
+    <thead><tr><th>Option</th><th>Type</th><th class="num">Est. monthly cost</th><th>Caveat</th></tr></thead>
+    <tbody></tbody>
+  </table>
+  <div class="disclaimer">
+    <strong>Honesty box:</strong> API costs are exact math from published per-token rates. Subscription "value" is <em>not</em> — providers publish vague limits ("5x more usage") that change without notice. If your API-equivalent usage is many times a plan's price, you would likely hit that plan's cap. Treat subscription rows as "flat price, capped usage". Always verify prices at the source links below before deciding — they change frequently.
+  </div>
+</section>
+
+<section id="plans">
+  <h2>Subscription plans compared <span class="badge sub">flat monthly</span></h2>
+  <table>
+    <thead><tr><th>Plan</th><th class="num">$/month</th><th>What you get</th></tr></thead>
+    <tbody id="planRows"></tbody>
+  </table>
+  <details><summary>Sources &amp; verification notes</summary>
+    <p class="src" id="planSources"></p>
+  </details>
+</section>
+
+<section id="api">
+  <h2>API pay-as-you-go rates <span class="badge api">per 1M tokens</span></h2>
+  <table>
+    <thead><tr><th>Model</th><th class="num">Input $/1M</th><th class="num">Output $/1M</th><th>Note</th></tr></thead>
+    <tbody id="apiRows"></tbody>
+  </table>
+  <details><summary>Sources &amp; verification notes</summary>
+    <p class="src" id="apiSources"></p>
+  </details>
+</section>
+
+<section id="faq">
+  <h2>Why this exists</h2>
+  <p>In July 2026, Hacker News front pages filled with the same complaint: AI pricing is confusing. Vague limits, models that leave subscriptions and move to usage credits, plans that quietly change mid-year. Most calculators compare API rates against each other — but the decision people actually face is <strong>flat subscription vs. usage billing</strong>. This page does that one comparison, with sourced numbers and honest caveats.</p>
+  <h3>How the math works</h3>
+  <p>Monthly API cost = requests/day × 30.4 × (input tokens × input rate + output tokens × output rate). Subscriptions are flat-priced, so they appear at their sticker price with a caveat about usage caps. No accounting for prompt caching (typically 90% off cached input) — real API bills for repetitive workloads can be lower.</p>
+  <h3>Rule of thumb</h3>
+  <p>Light chat users: free tiers usually suffice. Regular users: a ~$20 plan beats the API on flagship models. Heavy agentic coding: you exceed $20 of API value fast, but you'll also hit plan caps — that's when $100–200 tiers or usage billing on a cheap model win.</p>
+</section>
+
+<footer>
+  <p>Built autonomously by <a href="https://claude.com/claude">Claude</a> (Fable 5) as an experiment in agent-built micro-projects. Human at the wheel: Jerome.</p>
+  <p>
+    <!-- MONETIZATION: replace # with your real links -->
+    <a class="support" href="#" id="donateLink">☕ Support this project</a>
+    <a class="support" href="#" id="repoLink">⭐ Star on GitHub</a>
+  </p>
+  <p style="margin-top:10px">MIT licensed · No tracking, no cookies, no ads · Prices verified 2026-07-08</p>
+</footer>
+
+</div>
+
+<script>
+"use strict";
+// ============================================================
+// PRICING DATA — update here, then bump VERIFIED_DATE.
+// Every entry carries its source. Do not add unsourced prices.
+// ============================================================
+const VERIFIED_DATE = "2026-07-08";
+
+const SUBSCRIPTIONS = [
+  {name:"Claude Free",        price:0,    desc:"Basic access, modest limits",                                       src:"https://www.anthropic.com/pricing", verified:"secondary"},
+  {name:"Claude Pro",         price:20,   desc:"Standard limits; Fable 5 via separate usage credits since Jul 2026", src:"https://www.mindstudio.ai/blog/claude-fable-5-pricing-access-usage-limits", verified:"secondary"},
+  {name:"Claude Max (5x)",    price:100,  desc:"~5x Pro limits",                                                    src:"https://www.anthropic.com/pricing", verified:"secondary"},
+  {name:"Claude Max (20x)",   price:200,  desc:"~20x Pro limits; Fable 5 still billed via usage credits",           src:"https://www.pcworld.com/article/3181897/claude-subscribers-are-furious-over-fables-new-restrictions.html", verified:"secondary"},
+  {name:"ChatGPT Free",       price:0,    desc:"GPT-5.3 Instant, ~10 msgs/5h, ad-supported (US)",                   src:"https://chatgpt.com/pricing/", verified:"secondary"},
+  {name:"ChatGPT Go",         price:8,    desc:"More volume, still ads, no advanced features",                      src:"https://chatgpt.com/pricing/", verified:"secondary"},
+  {name:"ChatGPT Plus",       price:20,   desc:"400–2,000 msgs/5h on Instant; generous Thinking access",            src:"https://chatgpt.com/pricing/", verified:"secondary"},
+  {name:"ChatGPT Pro",        price:100,  desc:"~5x Plus limits",                                                   src:"https://chatgpt.com/pricing/", verified:"secondary"},
+  {name:"ChatGPT Pro Max",    price:200,  desc:"~20x Plus limits, 1M-token context",                                src:"https://chatgpt.com/pricing/", verified:"secondary"},
+  {name:"Google AI Plus",     price:7.99, desc:"2x Gemini limits, 200 GB storage",                                  src:"https://gemini.google/subscriptions/", verified:"secondary"},
+  {name:"Google AI Pro",      price:19.99,desc:"4x limits, Pro model, 5 TB, YouTube Premium Lite",                  src:"https://gemini.google/subscriptions/", verified:"secondary"},
+  {name:"Google AI Ultra",    price:99.99,desc:"~5x Pro limits, 20 TB (entry Ultra tier)",                          src:"https://www.engadget.com/2176060/the-google-ai-ultra-plan-now-starts-at-100-a-month/", verified:"secondary"},
+  {name:"Google AI Ultra 20x",price:200,  desc:"Up to 20x Pro limits, full YouTube Premium",                        src:"https://gemini.google/subscriptions/", verified:"secondary"},
+];
+
+const API_MODELS = [
+  {name:"Claude Sonnet 5",       inp:2.00,  out:10.00, note:"Intro price through Aug 31, 2026; then $3/$15", src:"https://platform.claude.com/docs/en/about-claude/pricing"},
+  {name:"Claude Opus 4.8",       inp:5.00,  out:25.00, note:"",                                              src:"https://platform.claude.com/docs/en/about-claude/pricing"},
+  {name:"Claude Fable 5",        inp:10.00, out:50.00, note:"Usage credits / API; not in subscriptions since Jul 2026", src:"https://www.anthropic.com/news/redeploying-fable-5"},
+  {name:"GPT-5.5",               inp:5.00,  out:30.00, note:"Cached input $0.50/1M",                         src:"https://www.aipricing.guru/openai-pricing/"},
+  {name:"GPT-5.5 Pro",           inp:30.00, out:180.00,note:"No cached-input discount",                      src:"https://www.aipricing.guru/openai-pricing/"},
+  {name:"Gemini 3.1 Pro",        inp:2.00,  out:12.00, note:"",                                              src:"https://benchlm.ai/llm-pricing"},
+  {name:"Gemini 3.1 Flash-Lite", inp:0.10,  out:0.40,  note:"Budget tier",                                   src:"https://benchlm.ai/llm-pricing"},
+  {name:"DeepSeek V4 Flash",     inp:0.14,  out:0.28,  note:"Off-peak/peak pricing may vary",                src:"https://benchlm.ai/llm-pricing"},
+];
+
+// Slider scales are logarithmic-ish so both chat and agentic ranges are reachable.
+const IN_SCALE  = v => Math.round(Math.pow(10, 2 + v*0.04));   // 100 → 1M
+const OUT_SCALE = v => Math.round(Math.pow(10, 2 + v*0.03));   // 100 → 100k
+
+const PRESETS = [
+  {label:"💬 Casual chat",    req:8,   inSl:18, outSl:33}, // ~520 in / ~980 out
+  {label:"💼 Daily assistant",req:40,  inSl:33, outSl:40}, // ~2.1k in / ~1.6k out
+  {label:"👨‍💻 Daily coding",  req:25,  inSl:70, outSl:60}, // ~63k in / ~6.3k out
+  {label:"🤖 Heavy agentic",  req:60,  inSl:88, outSl:70}, // ~330k in / ~12.5k out
+];
+
+const $ = id => document.getElementById(id);
+const fmt = n => n === 0 ? "$0" : n < 0.01 ? "<$0.01" : "$" + n.toLocaleString("en-US", {maximumFractionDigits: n < 100 ? 2 : 0});
+const fmtTok = n => n >= 1e6 ? (n/1e6).toFixed(1)+"M" : n >= 1000 ? Math.round(n/1000)+"k" : n;
+
+function calc(){
+  const reqDay = +$("reqSlider").value;
+  const inTok  = IN_SCALE(+$("inSlider").value);
+  const outTok = OUT_SCALE(+$("outSlider").value);
+  $("reqOut").textContent = reqDay + "/day";
+  $("inOut").textContent  = fmtTok(inTok);
+  $("outOut").textContent = fmtTok(outTok);
+
+  const monthlyReq = reqDay * 30.4;
+  const rows = [];
+  for(const m of API_MODELS){
+    const cost = monthlyReq * (inTok * m.inp + outTok * m.out) / 1e6;
+    rows.push({name:m.name, type:"API", cost, caveat:m.note || "Exact per-token math"});
+  }
+  for(const s of SUBSCRIPTIONS){
+    if(s.price === 0) continue;
+    rows.push({name:s.name, type:"Subscription", cost:s.price, caveat:"Flat price — capped, vaguely-defined usage limits"});
+  }
+  rows.sort((a,b)=>a.cost-b.cost);
+
+  const tbody = $("resultTable").querySelector("tbody");
+  tbody.innerHTML = rows.map((r,i)=>
+    `<tr class="${i===0?'best':''}"><td>${r.name}</td><td><span class="badge ${r.type==='API'?'api':'sub'}">${r.type}</span></td><td class="num">${fmt(r.cost)}/mo</td><td style="color:var(--muted);font-size:.85rem">${r.caveat}</td></tr>`
+  ).join("");
+
+  const cheapestApi = rows.find(r=>r.type==="API");
+  const flagship = API_MODELS.find(m=>m.name==="Claude Sonnet 5");
+  const flagshipCost = monthlyReq * (inTok*flagship.inp + outTok*flagship.out)/1e6;
+  let verdict;
+  if(flagshipCost < 5){
+    verdict = `At this usage, pay-as-you-go is almost certainly cheaper: a flagship model (Claude Sonnet 5) would cost you about <strong>${fmt(flagshipCost)}/month</strong> on the API — well under any $20 plan. Free tiers may even cover you.`;
+  } else if(flagshipCost < 25){
+    verdict = `Borderline. Flagship API usage ≈ <strong>${fmt(flagshipCost)}/month</strong> — near the $20 plan price. A subscription buys simplicity; the API buys precision. Budget models (${cheapestApi.name}, ${fmt(cheapestApi.cost)}/mo) undercut both.`;
+  } else {
+    verdict = `Heavy usage. The API equivalent is ≈ <strong>${fmt(flagshipCost)}/month</strong> on Claude Sonnet 5 — so a $20 plan would likely cap you. Realistic options: a $100–200 tier (if its multiplier covers you), usage billing, or a budget model (${cheapestApi.name}, ${fmt(cheapestApi.cost)}/mo).`;
+  }
+  $("verdict").innerHTML = verdict;
+}
+
+function setPreset(p, btn){
+  $("reqSlider").value = p.req;
+  $("inSlider").value  = p.inSl;
+  $("outSlider").value = p.outSl;
+  document.querySelectorAll("#presets button").forEach(b=>b.classList.remove("active"));
+  if(btn) btn.classList.add("active");
+  calc();
+}
+
+// build UI
+PRESETS.forEach(p=>{
+  const b = document.createElement("button");
+  b.textContent = p.label;
+  b.onclick = ()=>setPreset(p,b);
+  $("presets").appendChild(b);
+});
+["reqSlider","inSlider","outSlider"].forEach(id=>$(id).addEventListener("input",()=>{
+  document.querySelectorAll("#presets button").forEach(b=>b.classList.remove("active"));
+  calc();
+}));
+
+$("planRows").innerHTML = SUBSCRIPTIONS.map(s=>
+  `<tr><td>${s.name}</td><td class="num">${fmt(s.price)}</td><td style="color:var(--muted)">${s.desc}</td></tr>`).join("");
+$("planSources").innerHTML = "All plan prices as reported " + VERIFIED_DATE + ". Sources: " +
+  [...new Set(SUBSCRIPTIONS.map(s=>s.src))].map(u=>`<a href="${u}" rel="nofollow">${new URL(u).hostname}</a>`).join(" · ") +
+  ". Several figures come from secondary coverage rather than provider pages — verify before purchasing.";
+
+$("apiRows").innerHTML = API_MODELS.map(m=>
+  `<tr><td>${m.name}</td><td class="num">$${m.inp.toFixed(2)}</td><td class="num">$${m.out.toFixed(2)}</td><td style="color:var(--muted);font-size:.85rem">${m.note}</td></tr>`).join("");
+$("apiSources").innerHTML = "Rates as reported " + VERIFIED_DATE + ". Sources: " +
+  [...new Set(API_MODELS.map(m=>m.src))].map(u=>`<a href="${u}" rel="nofollow">${new URL(u).hostname}</a>`).join(" · ") +
+  ". Cached-input and batch discounts not modeled.";
+
+setPreset(PRESETS[1], document.querySelectorAll("#presets button")[1]);
+</script>
+</body>
+</html>
