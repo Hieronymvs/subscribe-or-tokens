@@ -30,7 +30,9 @@ There is no live feed — all data sits in two plain arrays at the top of `index
 
 Spotted a stale or wrong price? **Please open an issue or PR** — include a source link. That's the single most useful contribution to this project.
 
+##What about images?
 
+The same question exists for image generation, so the page compares that too: per-image API pricing (GPT Image, Imagen 4, Flux, Ideogram — from $0.005 to $0.06 per image) against Midjourney's flat tiers. One honest wrinkle: Midjourney doesn't sell images, it sells fast GPU hours, so its capacity figures (~200 images on Basic, ~3,600 on Mega) are estimates at roughly one GPU-minute per image — treat them as ballpark, not quota. Also worth knowing before you spend anything: ChatGPT and Google AI subscriptions already include image generation inside their general usage limits, so if you pay for one, try that first. All image prices currently come from secondary coverage rather than provider pages, and are date-stamped like everything else.
 ## Disclaimer
 
 Prices were verified against public sources on the date shown on the page; some come from secondary coverage rather than provider pages. AI pricing changes frequently. Verify at the source before spending money. Not financial advice.
