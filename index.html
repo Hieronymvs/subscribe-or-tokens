@@ -113,6 +113,25 @@
   </details>
 </section>
 
+<section id="images">
+  <h2>Image generation <span class="badge api">per image</span> vs <span class="badge sub">flat monthly</span></h2>
+  <div class="sliders" style="margin-top:6px">
+    <div class="slider-box">
+      <label>Images per month <output id="imgOut"></output></label>
+      <input type="range" id="imgSlider" min="0" max="100" value="50">
+    </div>
+  </div>
+  <div class="result-head" id="imgVerdict" style="margin-top:16px"></div>
+  <table id="imgTable">
+    <thead><tr><th>Option</th><th>Type</th><th class="num">Est. monthly cost</th><th>Caveat</th></tr></thead>
+    <tbody></tbody>
+  </table>
+  <p class="note">Chat subscriptions (ChatGPT Plus, Google AI plans) include image generation inside their general usage limits at no extra cost — if you already pay for one, try it before buying anything image-specific. Claude does not generate images. Midjourney bills GPU time, not images: capacity figures assume ~1 GPU-minute per image and are approximate; Standard and up add unlimited slower "relax" generation on top.</p>
+  <details><summary>Sources &amp; verification notes</summary>
+    <p class="src" id="imgSources"></p>
+  </details>
+</section>
+
 <section id="faq">
   <h2>Why this exists</h2>
   <p>In July 2026, Hacker News front pages filled with the same complaint: AI pricing is confusing. Vague limits, models that leave subscriptions and move to usage credits, plans that quietly change mid-year. Most calculators compare API rates against each other — but the decision people actually face is <strong>flat subscription vs. usage billing</strong>. This page does that one comparison, with sourced numbers and honest caveats.</p>
@@ -129,10 +148,13 @@
     <a class="support" href="#" id="donateLink">☕ Support this project</a>
     <a class="support" href="#" id="repoLink">⭐ Star on GitHub</a>
   </p>
-  <p style="margin-top:10px">MIT licensed · No tracking, no cookies, no ads · Prices verified 2026-07-08</p>
+  <p style="margin-top:10px">MIT licensed · No cookies, no ads · Privacy-friendly analytics by <a href="https://www.goatcounter.com" rel="nofollow">GoatCounter</a> · Prices verified 2026-07-17</p>
 </footer>
 
 </div>
+
+<!-- GOATCOUNTER: replace YOURCODE with the code you pick when creating your account at goatcounter.com -->
+<script data-goatcounter="https://subscribe_or_tokens.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 
 <script>
 "use strict";
@@ -140,19 +162,19 @@
 // PRICING DATA — update here, then bump VERIFIED_DATE.
 // Every entry carries its source. Do not add unsourced prices.
 // ============================================================
-const VERIFIED_DATE = "2026-07-08";
+const VERIFIED_DATE = "2026-07-17";
 
 const SUBSCRIPTIONS = [
-  {name:"Claude Free",        price:0,    desc:"Basic access, modest limits",                                       src:"https://www.anthropic.com/pricing", verified:"secondary"},
-  {name:"Claude Pro",         price:20,   desc:"Standard limits; Fable 5 via separate usage credits since Jul 2026", src:"https://www.mindstudio.ai/blog/claude-fable-5-pricing-access-usage-limits", verified:"secondary"},
-  {name:"Claude Max (5x)",    price:100,  desc:"~5x Pro limits",                                                    src:"https://www.anthropic.com/pricing", verified:"secondary"},
-  {name:"Claude Max (20x)",   price:200,  desc:"~20x Pro limits; Fable 5 still billed via usage credits",           src:"https://www.pcworld.com/article/3181897/claude-subscribers-are-furious-over-fables-new-restrictions.html", verified:"secondary"},
-  {name:"ChatGPT Free",       price:0,    desc:"GPT-5.3 Instant, ~10 msgs/5h, ad-supported (US)",                   src:"https://chatgpt.com/pricing/", verified:"secondary"},
+  {name:"Claude Free",        price:0,    desc:"Basic access, modest limits",                                       src:"https://claude.com/pricing", verified:"provider"},
+  {name:"Claude Pro",         price:20,   desc:"Standard limits; Fable 5 via separate usage credits since Jul 7, 2026", src:"https://claude.com/pricing", verified:"provider"},
+  {name:"Claude Max (5x)",    price:100,  desc:"~5x Pro limits per 5-hour session",                                 src:"https://claude.com/pricing", verified:"provider"},
+  {name:"Claude Max (20x)",   price:200,  desc:"~20x Pro limits; Fable 5 still billed via usage credits",           src:"https://claude.com/pricing", verified:"provider"},
+  {name:"ChatGPT Free",       price:0,    desc:"GPT-5.5 Instant, limited msgs, ad-supported (US)",                  src:"https://chatgpt.com/pricing/", verified:"secondary"},
   {name:"ChatGPT Go",         price:8,    desc:"More volume, still ads, no advanced features",                      src:"https://chatgpt.com/pricing/", verified:"secondary"},
   {name:"ChatGPT Plus",       price:20,   desc:"400–2,000 msgs/5h on Instant; generous Thinking access",            src:"https://chatgpt.com/pricing/", verified:"secondary"},
   {name:"ChatGPT Pro",        price:100,  desc:"~5x Plus limits",                                                   src:"https://chatgpt.com/pricing/", verified:"secondary"},
   {name:"ChatGPT Pro Max",    price:200,  desc:"~20x Plus limits, 1M-token context",                                src:"https://chatgpt.com/pricing/", verified:"secondary"},
-  {name:"Google AI Plus",     price:7.99, desc:"2x Gemini limits, 200 GB storage",                                  src:"https://gemini.google/subscriptions/", verified:"secondary"},
+  {name:"Google AI Plus",     price:4.99, desc:"2x Gemini limits, 400 GB storage",                                  src:"https://one.google.com/about/google-ai-plans/", verified:"provider"},
   {name:"Google AI Pro",      price:19.99,desc:"4x limits, Pro model, 5 TB, YouTube Premium Lite",                  src:"https://gemini.google/subscriptions/", verified:"secondary"},
   {name:"Google AI Ultra",    price:99.99,desc:"~5x Pro limits, 20 TB (entry Ultra tier)",                          src:"https://www.engadget.com/2176060/the-google-ai-ultra-plan-now-starts-at-100-a-month/", verified:"secondary"},
   {name:"Google AI Ultra 20x",price:200,  desc:"Up to 20x Pro limits, full YouTube Premium",                        src:"https://gemini.google/subscriptions/", verified:"secondary"},
@@ -162,11 +184,29 @@ const API_MODELS = [
   {name:"Claude Sonnet 5",       inp:2.00,  out:10.00, note:"Intro price through Aug 31, 2026; then $3/$15", src:"https://platform.claude.com/docs/en/about-claude/pricing"},
   {name:"Claude Opus 4.8",       inp:5.00,  out:25.00, note:"",                                              src:"https://platform.claude.com/docs/en/about-claude/pricing"},
   {name:"Claude Fable 5",        inp:10.00, out:50.00, note:"Usage credits / API; not in subscriptions since Jul 2026", src:"https://www.anthropic.com/news/redeploying-fable-5"},
-  {name:"GPT-5.5",               inp:5.00,  out:30.00, note:"Cached input $0.50/1M",                         src:"https://www.aipricing.guru/openai-pricing/"},
-  {name:"GPT-5.5 Pro",           inp:30.00, out:180.00,note:"No cached-input discount",                      src:"https://www.aipricing.guru/openai-pricing/"},
+  {name:"GPT-5.6 Sol",           inp:5.00,  out:30.00, note:"Flagship since Jul 9, 2026; cached input $0.50/1M", src:"https://techjacksolutions.com/ai-tools/chatgpt/chatgpt-pricing/"},
+  {name:"GPT-5.6 Terra",         inp:2.50,  out:15.00, note:"Mid-tier",                                      src:"https://techjacksolutions.com/ai-tools/chatgpt/chatgpt-pricing/"},
+  {name:"GPT-5.5 Pro",           inp:30.00, out:180.00,note:"Verify — may be superseded by 5.6 lineup",      src:"https://www.aipricing.guru/openai-pricing/"},
   {name:"Gemini 3.1 Pro",        inp:2.00,  out:12.00, note:"",                                              src:"https://benchlm.ai/llm-pricing"},
   {name:"Gemini 3.1 Flash-Lite", inp:0.10,  out:0.40,  note:"Budget tier",                                   src:"https://benchlm.ai/llm-pricing"},
   {name:"DeepSeek V4 Flash",     inp:0.14,  out:0.28,  note:"Off-peak/peak pricing may vary",                src:"https://benchlm.ai/llm-pricing"},
+];
+
+// Image generation — API prices are per 1024x1024 image at standard quality.
+const IMG_API = [
+  {name:"GPT Image 1 Mini",   per:0.005, note:"Budget pick (low-quality tier)",            src:"https://www.buildmvpfast.com/api-costs/ai-image"},
+  {name:"Imagen 4 Fast",      per:0.02,  note:"Best price/quality from a major provider",  src:"https://www.buildmvpfast.com/api-costs/ai-image"},
+  {name:"Ideogram 3.0",       per:0.03,  note:"Best at readable text in images",           src:"https://www.buildmvpfast.com/api-costs/ai-image"},
+  {name:"GPT Image 1.5",      per:0.04,  note:"Quality benchmark leader",                  src:"https://www.buildmvpfast.com/api-costs/ai-image"},
+  {name:"Imagen 4 Standard",  per:0.04,  note:"Batch API ~50% off",                        src:"https://www.buildmvpfast.com/api-costs/ai-image"},
+  {name:"Flux 2 Pro",         per:0.055, note:"Top photorealism",                          src:"https://www.buildmvpfast.com/api-costs/ai-image"},
+  {name:"Imagen 4 Ultra",     per:0.06,  note:"Premium tier",                              src:"https://www.buildmvpfast.com/api-costs/ai-image"},
+];
+const IMG_SUBS = [
+  {name:"Midjourney Basic",    price:10,  capImg:200,  desc:"~3.3 fast GPU h/mo (≈200 img), no relax mode", src:"https://techjacksolutions.com/ai-tools/midjourney/midjourney-pricing/"},
+  {name:"Midjourney Standard", price:30,  capImg:900,  desc:"~15 fast h (≈900 img) + unlimited relax",      src:"https://techjacksolutions.com/ai-tools/midjourney/midjourney-pricing/"},
+  {name:"Midjourney Pro",      price:60,  capImg:1800, desc:"~30 fast h (≈1,800 img), stealth mode",        src:"https://techjacksolutions.com/ai-tools/midjourney/midjourney-pricing/"},
+  {name:"Midjourney Mega",     price:120, capImg:3600, desc:"~60 fast h (≈3,600 img), stealth mode",        src:"https://techjacksolutions.com/ai-tools/midjourney/midjourney-pricing/"},
 ];
 
 // Slider scales are logarithmic-ish so both chat and agentic ranges are reachable.
@@ -257,6 +297,49 @@ $("apiSources").innerHTML = "Rates as reported " + VERIFIED_DATE + ". Sources: "
   ". Cached-input and batch discounts not modeled.";
 
 setPreset(PRESETS[1], document.querySelectorAll("#presets button")[1]);
+
+// ---- Image generation calculator ----
+const IMG_SCALE = v => Math.round(Math.pow(10, 1 + v*0.03)); // 10 → 10,000 img/mo
+
+function calcImg(){
+  const imgs = IMG_SCALE(+$("imgSlider").value);
+  $("imgOut").textContent = imgs.toLocaleString("en-US") + "/mo";
+
+  const rows = [];
+  for(const m of IMG_API){
+    rows.push({name:m.name, type:"API", cost:imgs*m.per, caveat:m.note + " · $" + m.per.toFixed(3) + "/img"});
+  }
+  for(const s of IMG_SUBS){
+    const over = imgs > s.capImg;
+    rows.push({name:s.name, type:"Subscription", cost:s.price, over,
+      caveat: s.desc + (over ? " — likely over fast cap at this volume" : "")});
+  }
+  rows.sort((a,b)=>a.cost-b.cost);
+
+  const tbody = $("imgTable").querySelector("tbody");
+  tbody.innerHTML = rows.map((r,i)=>
+    `<tr class="${i===0?'best':''}"><td>${r.name}</td><td><span class="badge ${r.type==='API'?'api':'sub'}">${r.type}</span></td><td class="num">${fmt(r.cost)}/mo</td><td style="color:${r.over?'var(--amber)':'var(--muted)'};font-size:.85rem">${r.caveat}</td></tr>`
+  ).join("");
+
+  const bench = IMG_API.find(m=>m.name==="Imagen 4 Fast");
+  const benchCost = imgs*bench.per;
+  const fittingSub = IMG_SUBS.find(s=>imgs <= s.capImg);
+  let v;
+  if(benchCost < 5){
+    v = `At ${imgs.toLocaleString("en-US")} images/month, pay-per-image is almost certainly cheaper: a solid model (Imagen 4 Fast) costs about <strong>${fmt(benchCost)}/month</strong>. If you already have a ChatGPT or Google AI subscription, its included image generation may cover you for free.`;
+  } else if(fittingSub && fittingSub.price < benchCost){
+    v = `At this volume a flat plan wins on this comparison: ${fittingSub.name} (${fmt(fittingSub.price)}/mo, ≈${fittingSub.capImg.toLocaleString("en-US")} fast images) undercuts ≈<strong>${fmt(benchCost)}/month</strong> of per-image API use — if Midjourney's style suits your work.`;
+  } else {
+    v = `Per-image API is competitive here: ≈<strong>${fmt(benchCost)}/month</strong> on Imagen 4 Fast${fittingSub ? `, vs ${fittingSub.name} at ${fmt(fittingSub.price)}/mo` : ", and no Midjourney tier's fast allotment clearly covers this volume"}. Batch APIs roughly halve per-image costs if you can wait.`;
+  }
+  $("imgVerdict").innerHTML = v;
+}
+$("imgSlider").addEventListener("input", calcImg);
+
+$("imgSources").innerHTML = "Per-image API rates and Midjourney tiers as reported " + VERIFIED_DATE + ". Sources: " +
+  [...new Set([...IMG_API.map(m=>m.src), ...IMG_SUBS.map(s=>s.src)])].map(u=>`<a href="${u}" rel="nofollow">${new URL(u).hostname}</a>`).join(" · ") +
+  ". All are secondary coverage, not provider pages — verify before purchasing. API prices are for 1024×1024 standard quality; higher resolutions and quality tiers cost more. Midjourney image capacity assumes ~1 GPU-minute per image (approximate).";
+calcImg();
 </script>
 </body>
 </html>
