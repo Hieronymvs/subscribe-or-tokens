@@ -154,7 +154,7 @@
 </div>
 
 <!-- GOATCOUNTER: replace YOURCODE with the code you pick when creating your account at goatcounter.com -->
-<script data-goatcounter="https://subscribe_or_tokens.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+<script data-goatcounter="https://YOURCODE.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 
 <script>
 "use strict";
@@ -190,6 +190,13 @@ const API_MODELS = [
   {name:"Gemini 3.1 Pro",        inp:2.00,  out:12.00, note:"",                                              src:"https://benchlm.ai/llm-pricing"},
   {name:"Gemini 3.1 Flash-Lite", inp:0.10,  out:0.40,  note:"Budget tier",                                   src:"https://benchlm.ai/llm-pricing"},
   {name:"DeepSeek V4 Flash",     inp:0.14,  out:0.28,  note:"Off-peak/peak pricing may vary",                src:"https://benchlm.ai/llm-pricing"},
+  {name:"Grok 4.5",              inp:2.00,  out:6.00,  note:"xAI flagship; 2x rates above 200k context",     src:"https://x.ai/news/grok-4-5"},
+  {name:"Kimi K3",               inp:3.00,  out:15.00, note:"Moonshot flagship (Jul 16, 2026); flat across 1M context", src:"https://openrouter.ai/moonshotai/kimi-k3"},
+  {name:"Muse Spark 1.1",        inp:1.25,  out:4.25,  note:"Meta's first paid API; US-only preview",        src:"https://models.dev/models/meta/muse-spark-1.1/"},
+  {name:"Qwen3.7 Max",           inp:2.50,  out:7.50,  note:"Alibaba first-party rate; cheaper via resellers", src:"https://artificialanalysis.ai/models/qwen3-7-max"},
+  {name:"GLM-5.2",               inp:1.40,  out:4.40,  note:"Z.ai official rate; cheaper via aggregators",   src:"https://www.aipricing.guru/models/z-ai-glm-5-2/"},
+  {name:"Seed 2.1 Pro",          inp:0.83,  out:4.14,  note:"ByteDance; official rate is ¥6/¥30 — USD is approx.", src:"https://www.llmreference.com/model/seed-2.1-pro"},
+  {name:"MiniMax M3",            inp:0.60,  out:2.40,  note:"Multimodal; ~2x rates above 512k context",      src:"https://www.aimadetools.com/blog/qwen-3-7-vs-minimax-m3/"},
 ];
 
 // Image generation — API prices are per 1024x1024 image at standard quality.
