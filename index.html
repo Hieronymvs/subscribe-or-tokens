@@ -168,9 +168,9 @@
   <p>
     <!-- MONETIZATION: replace # with your real links -->
     <a class="support" href="#" id="donateLink">☕ Support this project</a>
-    <a class="support" href="#" id="repoLink">⭐ Star on GitHub</a>
+    <a class="support" href="https://github.com/Hieronymvs/subscribe-or-tokens" id="repoLink">⭐ Star on GitHub</a>
   </p>
-  <p style="margin-top:10px">MIT licensed · No cookies, no ads · Privacy-friendly analytics by <a href="https://www.goatcounter.com" rel="nofollow">GoatCounter</a> · Prices verified 2026-07-17</p>
+  <p style="margin-top:10px">MIT licensed · No cookies, no ads · Privacy-friendly analytics by <a href="https://www.goatcounter.com" rel="nofollow">GoatCounter</a> · Prices verified 2026-08-20</p>
 </footer>
 
 </div>
@@ -184,13 +184,13 @@
 // PRICING DATA — update here, then bump VERIFIED_DATE.
 // Every entry carries its source. Do not add unsourced prices.
 // ============================================================
-const VERIFIED_DATE = "2026-07-17";
+const VERIFIED_DATE = "2026-08-20";
 
 const SUBSCRIPTIONS = [
   {platform:"Anthropic (Claude)", name:"Claude Free",        price:0,    desc:"Basic access, modest limits",                                       src:"https://claude.com/pricing", verified:"provider"},
   {platform:"Anthropic (Claude)", name:"Claude Pro",         price:20,   desc:"Standard limits; Fable 5 via separate usage credits since Jul 7, 2026", src:"https://claude.com/pricing", verified:"provider"},
   {platform:"Anthropic (Claude)", name:"Claude Max (5x)",    price:100,  desc:"~5x Pro limits per 5-hour session",                                 src:"https://claude.com/pricing", verified:"provider"},
-  {platform:"Anthropic (Claude)", name:"Claude Max (20x)",   price:200,  desc:"~20x Pro limits; Fable 5 still billed via usage credits",           src:"https://claude.com/pricing", verified:"provider"},
+  {platform:"Anthropic (Claude)", name:"Claude Max (20x)",   price:200,  desc:"~20x Pro limits; Opus 5 default; Fable 5 still via usage credits",           src:"https://claude.com/pricing", verified:"provider"},
   {platform:"OpenAI (ChatGPT)",   name:"ChatGPT Free",       price:0,    desc:"GPT-5.5 Instant, limited msgs, ad-supported (US)",                  src:"https://chatgpt.com/pricing/", verified:"secondary"},
   {platform:"OpenAI (ChatGPT)",   name:"ChatGPT Go",         price:8,    desc:"More volume, still ads, no advanced features",                      src:"https://chatgpt.com/pricing/", verified:"secondary"},
   {platform:"OpenAI (ChatGPT)",   name:"ChatGPT Plus",       price:20,   desc:"400–2,000 msgs/5h on Instant; generous Thinking access",            src:"https://chatgpt.com/pricing/", verified:"secondary"},
@@ -206,16 +206,18 @@ const SUBSCRIPTIONS = [
 ];
 
 const API_MODELS = [
-  {platform:"Anthropic (Claude)", name:"Claude Sonnet 5",       inp:2.00,  out:10.00, note:"Intro price through Aug 31, 2026; then $3/$15", src:"https://platform.claude.com/docs/en/about-claude/pricing"},
-  {platform:"Anthropic (Claude)", name:"Claude Opus 4.8",       inp:5.00,  out:25.00, note:"",                                              src:"https://platform.claude.com/docs/en/about-claude/pricing"},
+  {platform:"Anthropic (Claude)", name:"Claude Sonnet 5",       inp:2.00,  out:10.00, note:"$2/$10 now standard — the planned Sep 1, 2026 increase was cancelled", src:"https://platform.claude.com/docs/en/about-claude/pricing"},
+  {platform:"Anthropic (Claude)", name:"Claude Opus 5",         inp:5.00,  out:25.00, note:"Current Opus (Jul 24, 2026), replaces 4.8 at the same rate; thinking on by default bills as output", src:"https://platform.claude.com/docs/en/about-claude/pricing"},
+  {platform:"Anthropic (Claude)", name:"Claude Haiku 4.5", inp:1.00, out:5.00, note:"Cheapest current Claude", src:"https://platform.claude.com/docs/en/about-claude/pricing"},
   {platform:"Anthropic (Claude)", name:"Claude Fable 5",        inp:10.00, out:50.00, note:"Usage credits / API; not in subscriptions since Jul 2026", src:"https://www.anthropic.com/news/redeploying-fable-5"},
   {platform:"OpenAI (ChatGPT)", name:"GPT-5.6 Sol",           inp:5.00,  out:30.00, note:"Flagship since Jul 9, 2026; cached input $0.50/1M", src:"https://techjacksolutions.com/ai-tools/chatgpt/chatgpt-pricing/"},
-  {platform:"OpenAI (ChatGPT)", name:"GPT-5.6 Terra",         inp:2.50,  out:15.00, note:"Mid-tier",                                      src:"https://techjacksolutions.com/ai-tools/chatgpt/chatgpt-pricing/"},
-  {platform:"OpenAI (ChatGPT)", name:"GPT-5.5 Pro",           inp:30.00, out:180.00,note:"Verify — may be superseded by 5.6 lineup",      src:"https://www.aipricing.guru/openai-pricing/"},
+  {platform:"OpenAI (ChatGPT)", name:"GPT-5.6 Terra",         inp:2.00,  out:12.00, note:"Mid-tier; 20% price cut Jul 30, 2026",                                      src:"https://techjacksolutions.com/ai-tools/chatgpt/chatgpt-pricing/"},
+  {platform:"OpenAI (ChatGPT)", name:"GPT-5.6 Luna",          inp:0.20,  out:1.20,  note:"Budget tier; 80% price cut Jul 30, 2026",      src:"https://www.aipricing.guru/openai-pricing/"},
   {platform:"Google (Gemini)", name:"Gemini 3.1 Pro",        inp:2.00,  out:12.00, note:"",                                              src:"https://benchlm.ai/llm-pricing"},
   {platform:"Google (Gemini)", name:"Gemini 3.1 Flash-Lite", inp:0.10,  out:0.40,  note:"Budget tier",                                   src:"https://benchlm.ai/llm-pricing"},
-  {platform:"DeepSeek", name:"DeepSeek V4 Flash",     inp:0.14,  out:0.28,  note:"Off-peak/peak pricing may vary",                src:"https://benchlm.ai/llm-pricing"},
-  {platform:"xAI (Grok)", name:"Grok 4.5",              inp:2.00,  out:6.00,  note:"xAI flagship; 2x rates above 200k context",     src:"https://x.ai/news/grok-4-5"},
+  {platform:"Google (Gemini)", name:"Gemini 3.7 Flash", inp:0.75, out:3.75, note:"Promo rate through 2026; list price doubles Jan 1, 2027", src:"https://llm-stats.com/ai-news"},
+  {platform:"DeepSeek", name:"DeepSeek V4 Flash",     inp:0.22,  out:0.66,  note:"Off-peak rate; peak hours (01–04 & 06–10 UTC) double it. Big hike Aug 16, 2026", src:"https://www.aipricing.guru/deepseek-pricing/"},
+  {platform:"xAI (Grok)", name:"Grok 4.6",              inp:2.00,  out:6.00,  note:"Current xAI flagship (Aug 2026), same rate as 4.5", src:"https://llm-stats.com/ai-news"},
   {platform:"Moonshot (Kimi)", name:"Kimi K3",               inp:3.00,  out:15.00, note:"Moonshot flagship (Jul 16, 2026); flat across 1M context", src:"https://openrouter.ai/moonshotai/kimi-k3"},
   {platform:"Meta", name:"Muse Spark 1.1",        inp:1.25,  out:4.25,  note:"Meta's first paid API; US-only preview",        src:"https://models.dev/models/meta/muse-spark-1.1/"},
   {platform:"Alibaba (Qwen)", name:"Qwen3.7 Max",           inp:2.50,  out:7.50,  note:"Alibaba first-party rate; cheaper via resellers", src:"https://artificialanalysis.ai/models/qwen3-7-max"},
@@ -285,8 +287,8 @@ function calc(){
       : `<div class="empty">— no flat plan offered</div>`;
 
     const apiPane = apis.length
-      ? `<table><thead><tr><th>Model</th><th class="num">Est. $/mo</th></tr></thead><tbody>` +
-        apis.map(m=>`<tr><td title="${m.note||''}">${m.name}</td><td class="num">${fmt(m.cost)}</td></tr>`).join("") +
+      ? `<table><thead><tr><th>Model</th><th class="num">Est. total $/mo</th></tr></thead><tbody>` +
+        apis.map(m=>`<tr><td title="$${m.inp}/$${m.out} per 1M tokens in/out${m.note ? ' · ' + m.note : ''}">${m.name}</td><td class="num">${fmt(m.cost)}</td></tr>`).join("") +
         `</tbody></table>`
       : `<div class="empty">— no public per-token API</div>`;
 
