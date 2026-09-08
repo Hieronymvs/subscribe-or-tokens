@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Subscribe or Tokens? — AI plan vs pay-as-you-go calculator</title>
-<meta name="description" content="Should you pay for a Claude, ChatGPT or Gemini subscription, or pay per token via the API? Enter your usage and find the cheapest option. Prices verified August 2026.">
+<meta name="description" content="Should you pay for a Claude, ChatGPT or Gemini subscription, or pay per token via the API? Enter your usage and find the cheapest option. Prices verified September 2026.">
 <style>
   :root{
     --bg:#0d1117; --panel:#161b22; --panel2:#1c2330; --border:#2d3748;
@@ -58,7 +58,7 @@
 <header>
   <h1>Subscribe or Tokens<span class="q">?</span></h1>
   <p class="tagline">Flat AI subscription or pay-as-you-go API — which is cheaper <em>for your usage</em>?</p>
-  <span class="stamp" id="verifiedStamp">Prices last verified: August 24, 2026</span>
+  <span class="stamp" id="verifiedStamp">Prices last verified: September 7, 2026</span>
 </header>
 
 <section id="calculator">
@@ -129,7 +129,7 @@
     <a class="support" href="#" id="donateLink">☕ Support this project</a>
     <a class="support" href="#" id="repoLink">⭐ Star on GitHub</a>
   </p>
-  <p style="margin-top:10px">MIT licensed · No tracking, no cookies, no ads · Prices verified 2026-08-24</p>
+  <p style="margin-top:10px">MIT licensed · No tracking, no cookies, no ads · Prices verified 2026-09-07</p>
 </footer>
 
 </div>
@@ -140,7 +140,7 @@
 // PRICING DATA — update here, then bump VERIFIED_DATE.
 // Every entry carries its source. Do not add unsourced prices.
 // ============================================================
-const VERIFIED_DATE = "2026-08-24";
+const VERIFIED_DATE = "2026-09-07";
 
 const SUBSCRIPTIONS = [
   {name:"Claude Free",        price:0,    desc:"Basic access, modest limits",                                       src:"https://www.anthropic.com/pricing", verified:"secondary"},
@@ -152,21 +152,21 @@ const SUBSCRIPTIONS = [
   {name:"ChatGPT Plus",       price:20,   desc:"400–2,000 msgs/5h on Instant; generous Thinking access",            src:"https://chatgpt.com/pricing/", verified:"secondary"},
   {name:"ChatGPT Pro",        price:100,  desc:"~5x Plus limits",                                                   src:"https://chatgpt.com/pricing/", verified:"secondary"},
   {name:"ChatGPT Pro Max",    price:200,  desc:"~20x Plus limits, 1M-token context",                                src:"https://chatgpt.com/pricing/", verified:"secondary"},
-  {name:"Google AI Plus",     price:7.99, desc:"2x Gemini limits, 200 GB storage",                                  src:"https://gemini.google/subscriptions/", verified:"secondary"},
+  {name:"Google AI Plus",     price:4.99, desc:"2x Gemini limits, 200 GB storage",                                  src:"https://gemini.google/subscriptions/", verified:"secondary"},
   {name:"Google AI Pro",      price:19.99,desc:"4x limits, Pro model, 5 TB, YouTube Premium Lite",                  src:"https://gemini.google/subscriptions/", verified:"secondary"},
   {name:"Google AI Ultra",    price:99.99,desc:"~5x Pro limits, 20 TB (entry Ultra tier)",                          src:"https://www.engadget.com/2176060/the-google-ai-ultra-plan-now-starts-at-100-a-month/", verified:"secondary"},
-  {name:"Google AI Ultra 20x",price:200,  desc:"Up to 20x Pro limits, full YouTube Premium",                        src:"https://gemini.google/subscriptions/", verified:"secondary"},
+  {name:"Google AI Ultra 20x",price:199.99,  desc:"Up to 20x Pro limits, full YouTube Premium",                        src:"https://gemini.google/subscriptions/", verified:"secondary"},
 ];
 
 const API_MODELS = [
-  {name:"Claude Sonnet 5",       inp:2.00,  out:10.00, note:"Intro $2/$10 now permanent; scheduled $3/$15 increase cancelled", src:"https://platform.claude.com/docs/en/about-claude/pricing"},
+  {name:"Claude Sonnet 5",       inp:2.00,  out:10.00, note:"$2/$10 now permanent; planned Sep 1, 2026 rise to $3/$15 cancelled", src:"https://platform.claude.com/docs/en/about-claude/pricing"},
   {name:"Claude Opus 4.8",       inp:5.00,  out:25.00, note:"",                                              src:"https://platform.claude.com/docs/en/about-claude/pricing"},
   {name:"Claude Fable 5",        inp:10.00, out:50.00, note:"Usage credits / API; not in subscriptions since Jul 2026", src:"https://www.anthropic.com/news/redeploying-fable-5"},
-  {name:"GPT-5.6",               inp:4.00,  out:20.00, note:"Flagship (Sol); promo short-context rate through Nov 21, 2026 (std $5/$30); cached $0.50/1M", src:"https://www.aipricing.guru/openai-pricing/"},
+  {name:"GPT-5.5",               inp:5.00,  out:30.00, note:"Cached input $0.50/1M",                         src:"https://www.aipricing.guru/openai-pricing/"},
   {name:"GPT-5.5 Pro",           inp:30.00, out:180.00,note:"No cached-input discount",                      src:"https://www.aipricing.guru/openai-pricing/"},
   {name:"Gemini 3.1 Pro",        inp:2.00,  out:12.00, note:"",                                              src:"https://benchlm.ai/llm-pricing"},
-  {name:"Gemini 3.5 Flash-Lite", inp:0.30,  out:2.50,  note:"Budget tier; succeeds 3.1 Flash-Lite (deprecated). Gemini 2.5 Flash-Lite $0.10/$0.40 retires Oct 16, 2026", src:"https://benchlm.ai/llm-pricing"},
-  {name:"DeepSeek V4 Flash",     inp:0.22,  out:0.66,  note:"Off-peak rate (new Aug 16, 2026); peak 01-04 & 06-10 UTC doubles to $0.44/$1.32", src:"https://benchlm.ai/llm-pricing"},
+  {name:"Gemini 3.1 Flash-Lite", inp:0.25,  out:1.50,  note:"Budget tier (standard rate)",                                   src:"https://benchlm.ai/llm-pricing"},
+  {name:"DeepSeek V4 Flash",     inp:0.22,  out:0.66,  note:"Off-peak rate; peak ~2x, dynamic since Aug 16 2026",                src:"https://benchlm.ai/llm-pricing"},
 ];
 
 // Slider scales are logarithmic-ish so both chat and agentic ranges are reachable.
