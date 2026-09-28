@@ -58,7 +58,7 @@
 <header>
   <h1>Subscribe or Tokens<span class="q">?</span></h1>
   <p class="tagline">Flat AI subscription or pay-as-you-go API — which is cheaper <em>for your usage</em>?</p>
-  <span class="stamp" id="verifiedStamp">Prices last verified: September 7, 2026</span>
+  <span class="stamp" id="verifiedStamp">Prices last verified: September 28, 2026</span>
 </header>
 
 <section id="calculator">
@@ -129,7 +129,7 @@
     <a class="support" href="#" id="donateLink">☕ Support this project</a>
     <a class="support" href="#" id="repoLink">⭐ Star on GitHub</a>
   </p>
-  <p style="margin-top:10px">MIT licensed · No tracking, no cookies, no ads · Prices verified 2026-09-07</p>
+  <p style="margin-top:10px">MIT licensed · No tracking, no cookies, no ads · Prices verified 2026-09-28</p>
 </footer>
 
 </div>
@@ -140,14 +140,14 @@
 // PRICING DATA — update here, then bump VERIFIED_DATE.
 // Every entry carries its source. Do not add unsourced prices.
 // ============================================================
-const VERIFIED_DATE = "2026-09-07";
+const VERIFIED_DATE = "2026-09-28";
 
 const SUBSCRIPTIONS = [
   {name:"Claude Free",        price:0,    desc:"Basic access, modest limits",                                       src:"https://www.anthropic.com/pricing", verified:"secondary"},
-  {name:"Claude Pro",         price:20,   desc:"Standard limits; Fable 5 via separate usage credits since Jul 2026", src:"https://www.mindstudio.ai/blog/claude-fable-5-pricing-access-usage-limits", verified:"secondary"},
+  {name:"Claude Pro",         price:20,   desc:"Standard limits; Fable 5.1 via separate usage credits since Jul 2026", src:"https://www.mindstudio.ai/blog/claude-fable-5-pricing-access-usage-limits", verified:"secondary"},
   {name:"Claude Max (5x)",    price:100,  desc:"~5x Pro limits",                                                    src:"https://www.anthropic.com/pricing", verified:"secondary"},
-  {name:"Claude Max (20x)",   price:200,  desc:"~20x Pro limits; Fable 5 still billed via usage credits",           src:"https://www.pcworld.com/article/3181897/claude-subscribers-are-furious-over-fables-new-restrictions.html", verified:"secondary"},
-  {name:"ChatGPT Free",       price:0,    desc:"GPT-5.3 Instant, ~10 msgs/5h, ad-supported (US)",                   src:"https://chatgpt.com/pricing/", verified:"secondary"},
+  {name:"Claude Max (20x)",   price:200,  desc:"~20x Pro limits; Fable 5.1 still billed via usage credits",           src:"https://www.pcworld.com/article/3181897/claude-subscribers-are-furious-over-fables-new-restrictions.html", verified:"secondary"},
+  {name:"ChatGPT Free",       price:0,    desc:"GPT-5.6 Terra, ~10 msgs/5h, ad-supported (US)",                   src:"https://chatgpt.com/pricing/", verified:"secondary"},
   {name:"ChatGPT Go",         price:8,    desc:"More volume, still ads, no advanced features",                      src:"https://chatgpt.com/pricing/", verified:"secondary"},
   {name:"ChatGPT Plus",       price:20,   desc:"400–2,000 msgs/5h on Instant; generous Thinking access",            src:"https://chatgpt.com/pricing/", verified:"secondary"},
   {name:"ChatGPT Pro",        price:100,  desc:"~5x Plus limits",                                                   src:"https://chatgpt.com/pricing/", verified:"secondary"},
@@ -160,13 +160,14 @@ const SUBSCRIPTIONS = [
 
 const API_MODELS = [
   {name:"Claude Sonnet 5",       inp:2.00,  out:10.00, note:"$2/$10 now permanent; planned Sep 1, 2026 rise to $3/$15 cancelled", src:"https://platform.claude.com/docs/en/about-claude/pricing"},
-  {name:"Claude Opus 4.8",       inp:5.00,  out:25.00, note:"",                                              src:"https://platform.claude.com/docs/en/about-claude/pricing"},
-  {name:"Claude Fable 5",        inp:10.00, out:50.00, note:"Usage credits / API; not in subscriptions since Jul 2026", src:"https://www.anthropic.com/news/redeploying-fable-5"},
-  {name:"GPT-5.5",               inp:5.00,  out:30.00, note:"Cached input $0.50/1M",                         src:"https://www.aipricing.guru/openai-pricing/"},
-  {name:"GPT-5.5 Pro",           inp:30.00, out:180.00,note:"No cached-input discount",                      src:"https://www.aipricing.guru/openai-pricing/"},
-  {name:"Gemini 3.1 Pro",        inp:2.00,  out:12.00, note:"",                                              src:"https://benchlm.ai/llm-pricing"},
-  {name:"Gemini 3.1 Flash-Lite", inp:0.25,  out:1.50,  note:"Budget tier (standard rate)",                                   src:"https://benchlm.ai/llm-pricing"},
-  {name:"DeepSeek V4 Flash",     inp:0.22,  out:0.66,  note:"Off-peak rate; peak ~2x, dynamic since Aug 16 2026",                src:"https://benchlm.ai/llm-pricing"},
+  {name:"Claude Opus 5.5",       inp:4.00,  out:20.00, note:"Released Sep 22, 2026; replaces Opus 4.8 at a lower price",  src:"https://www.anthropic.com/claude/opus"},
+  {name:"Claude Fable 5.1",      inp:10.00, out:50.00, note:"Usage credits / API; not in subscriptions since Jul 2026", src:"https://platform.claude.com/docs/en/about-claude/pricing"},
+  {name:"GPT-5.6 Sol",           inp:5.00,  out:30.00, note:"OpenAI's flagship, renamed from GPT-5.5; cached input $0.50/1M", src:"https://openai.com/api/pricing/"},
+  {name:"GPT-5.6 Terra",         inp:2.00,  out:12.00, note:"Mid-tier model; standalone 'Pro' tier discontinued; cached input $0.20/1M", src:"https://openai.com/api/pricing/"},
+  {name:"Gemini 3.1 Pro",        inp:2.00,  out:12.00, note:"Still labelled 'Preview' by Google",                        src:"https://ai.google.dev/gemini-api/docs/pricing"},
+  {name:"Gemini 3.7 Flash",      inp:0.75,  out:3.75,  note:"Introductory price; doubles Jan 1, 2027 per Google's pricing page", src:"https://ai.google.dev/gemini-api/docs/pricing"},
+  {name:"Gemini 3.1 Flash-Lite", inp:0.25,  out:1.50,  note:"Budget tier (standard rate)",                                   src:"https://ai.google.dev/gemini-api/docs/pricing"},
+  {name:"DeepSeek V4.1 Flash",   inp:0.15,  out:0.60,  note:"Off-peak rate; peak (01:00-04:00 & 06:00-10:00 UTC weekdays) ~2x",  src:"https://api-docs.deepseek.com/quick_start/pricing/"},
 ];
 
 // Slider scales are logarithmic-ish so both chat and agentic ranges are reachable.
